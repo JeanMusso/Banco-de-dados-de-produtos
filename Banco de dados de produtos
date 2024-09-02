@@ -1,81 +1,91 @@
 #include <stdio.h>
 #include <string.h>
+#define MaxProd 100
+#define TamProd 20
 
-#define MAX_PRODUTOS 100
-#define MAX_NOME 50
+// Struct para armazenar informacoes do produto.
 
-// Estrutura para armazenar informações de um produto
 typedef struct {
     int codigo;
-    char nome[MAX_NOME];
+    char  nome[TamProd];
     float preco;
     int quantidade;
-} Produto;
+}Produto;
 
-// Declaração do array de produtos e do contador de produtos
-Produto produtos[MAX_PRODUTOS];
+// Declarar o array de produtos e o contador de produtos.
+
+Produto produtos[MaxProd];
 int contador = 0;
 
-// Funções
-void inserirProduto();
-void listarProdutos();
-void buscarProduto();
-void excluirProduto();
-void menu();
+// Declarar as funções.
 
-int main() {
-    menu();
+void InserirProd();
+void ListarProd();
+void BuscarProd();
+void ExcluirProd();
+void Menu();
+
+int main(){
+    Menu();
     return 0;
 }
 
-// Função para inserir um novo produto
-void inserirProduto() {
-    if (contador >= MAX_PRODUTOS) {
-        printf("Erro: Limite de produtos atingido.\n");
-        return;
+// Criar função para inserir um produto novo.
+
+void InserirProd(){
+    if (contador >= MaxProd) {
+        printf("Limite de produtos atingidos!\n");
+        return; // Essa condicao serve para que o limite de produtos nao seja atingido.
     }
-    Produto novoProduto;
+    Produto novoProd;
+    printf("Digite o codigo do produto:\n ");
+    scanf("%d", &novoProd.codigo);
+    getchar();
 
-    printf("Digite o código do produto: ");
-    scanf("%d", &novoProduto.codigo);
-
-    // Verifica se o código já existe
-    for (int i = 0; i < contador; i++) {
-        if (produtos[i].codigo == novoProduto.codigo) {
-            printf("Erro: Código de produto já existe.\n");
+    // Analisar se o codigo ja existe ou nao.
+    for (int i = 0; i < contador; i++){
+        if (produtos[i].codigo == novoProd.codigo){ // Verificar dentro da array
+            printf("Codigo de produto ja existente!\n");
             return;
         }
     }
 
-    printf("Digite o nome do produto: ");
-    scanf(" %[^\n]%*c", novoProduto.nome);
-    printf("Digite o preco do produto: ");
-    scanf("%f", &novoProduto.preco);
-    printf("Digite a quantidade em estoque: ");
-    scanf("%d", &novoProduto.quantidade);
+    printf("Digite o nome do produto:\n");
+    scanf("%[^\n]%*c", novoProd.nome);
+    printf("Digite o preco do produto:\n");
+    scanf("%f", &novoProd.preco);
+    getchar();
+    printf("Digite a quantidade em estoque:\n");
+    scanf("%d", &novoProd.quantidade);
+    getchar();
 
-    produtos[contador] = novoProduto;
+    // Adicionar ao contador de produtos o novo produto adicionado
+    produtos[contador] = novoProd;
     contador++;
-    printf("Produto inserido com sucesso");
+    printf("Produto adicionado com sucesso!");
 }
 
-// Função para listar todos os produtos
-void listarProdutos() {
-    if (contador == 0) {
-        printf("Nenhum produto cadastrado.\n");
-        return;
+// Criar função para listar os produtos
+
+void ListarProd(){
+    if(contador == 0){
+        printf("Nenhum produto registrado!\n");
+        return; // caso nao tenha nenhum produto no array, e consequentemente no contador aparecera essa mensagem.
     }
 
-    printf("\nLista de Produtos:\n");
-    for (int i = 0; i < contador; i++) {
-        printf("Codigo: %d | Nome: %s | Preco: %.2f | Quantidade: %d\n",
-               produtos[i].codigo, produtos[i].nome, produtos[i].preco, produtos[i].>
+    printf("Lista de Produtos\n");
+    for (int i = 0; i < contador; i++){
+        printf("Codigo: %d | Nome: %s | Preco: %.2f | Quantidade: %d\n", produtos[i].codigo, produtos[i].nome, produtos[i].preco, produtos[i].quantidade);
     }
+    return;
+
+
 }
 
-// Função para buscar um produto pelo nome
-void buscarProduto() {
-    char nomeBusca[MAX_NOME];
+// Criar função para buscar um produto pelo nome
+
+void BuscarProd() {
+    char nomeBusca[TamProd];
     printf("Digite o nome do produto para buscar: ");
     scanf(" %[^\n]%*c", nomeBusca);
 
@@ -83,64 +93,62 @@ void buscarProduto() {
         if (strcmp(produtos[i].nome, nomeBusca) == 0) {
             printf("Produto encontrado:\n");
             printf("Codigo: %d | Nome: %s | Preco: %.2f | Quantidade: %d\n",
-                   produtos[i].codigo, produtos[i].nome, produtos[i].preco, produtos>
+                   produtos[i].codigo, produtos[i].nome, produtos[i].preco, produtos[i].quantidade);
             return;
         }
     }
     printf("Produto não encontrado.\n");
 }
 
-// Função para excluir um produto pelo nome
-void excluirProduto() {
-    char nomeExclusao[MAX_NOME];
-    printf("Digite o nome do produto para excluir: ");
-    scanf(" %[^\n]%*c", nomeExclusao);
+
+// Criar a função para excluir produtos pelo nome
+
+void ExcluirProd(){
+    char nomeExcluir[TamProd];
+    printf("Digite o nome do produto que deseja excluir:\n ");
+    scanf("%[^\n]%*c", nomeExcluir);
 
     for (int i = 0; i < contador; i++) {
-        if (strcmp(produtos[i].nome, nomeExclusao) == 0) {
+        if (strcmp(produtos[i].nome, nomeExcluir) == 0){
             for (int j = i; j < contador - 1; j++) {
                 produtos[j] = produtos[j + 1];
             }
-            contador--;
-            printf("Produto excluído com sucesso.\n");
+            contador --; // o for vai percorrer a array e vai achar o produto igual ao que digitado e remove-lo e logo apos ajusta-los para a posicao nova.
+            printf("Produto excluido com sucesso! \n");
             return;
         }
     }
-    printf("Produto não encontrado.\n");
+    printf("Produto naox encontrado!\n");
 }
 
-// Função para apresentar o menu de opções
-void menu() {
+//Criar a função para mostrar o menu de opcoes
+
+void Menu(){
     int opcao;
 
-    do {
-        printf("\n----- Menu -----\n");
-        printf("1. Inserir produto\n");
-        printf("2. Listar todos os produtos\n");
-        printf("3. Buscar produto por nome\n");
-        printf("4. Excluir produto por nome\n");
-        printf("5. Sair\n");
-        printf("Escolha uma opção: ");
+    do{
+        printf("\n=== MENU ===\n1. Inserir produto\n2. Listar todos os produtos\n3. Buscar produto por nome\n4. Excluir produto por nome\n5. Sair\nEscolha uma opcao: ");
         scanf("%d", &opcao);
 
-        switch (opcao) {
+        switch (opcao) { // o switch foi usado para poder selecionar cada opcao que tem no menu, sendo cada case as funcoes que a gente criou.
             case 1:
-                inserirProduto();
+                InserirProd();
                 break;
             case 2:
-                listarProdutos();
+                ListarProd();
                 break;
             case 3:
-                buscarProduto();
+                BuscarProd();
                 break;
             case 4:
-                excluirProduto();
+                ExcluirProd();
                 break;
             case 5:
                 printf("Saindo do programa.\n");
                 break;
             default:
-                printf("Opção inválida. Tente novamente.\n");
+            printf("Opção invalida. Tente novamente.\n");
         }
-    } while (opcao != 5);
+    }while (opcao != 5); // encerrar o loop while quando digitado a opcao 5 de sair do progama.
 }
+
